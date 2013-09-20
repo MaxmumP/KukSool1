@@ -237,8 +237,15 @@ class Knowledge:
         print printstr
         recorder(printstr)
     
-    def randomQuiz(self):
-        self.setQuiz(random.choice(self.techniques).name)
+    def randomQuiz(self, min_level=0):
+        eligible = []
+        for tech in self.techniques:
+            if tech.level >= min_level:
+                eligible.append(tech)
+        res=None
+        while not res:
+            res=self.setQuiz(random.choice(eligible).name)
+        return res
         
     def setQuiz(self, set_name, retake=False):
         #TODO: check for which set by name, initials, etc...
@@ -262,7 +269,12 @@ class Knowledge:
         right_time_tot=0
         wrongs={}
         rights={}
-        raw_input("Hit Enter to start quiz > ")
+        check=raw_input("Hit Enter to start quiz > ")
+        if check!="":
+            if check=="q":
+                return quiz_results
+            else:
+                return None
         print "(-=pass, q=quit, h=hint, enter=you know the answer)\n"
         while len(tech_numbers)>0:
             tech_num=random.choice(tech_numbers)
@@ -310,9 +322,8 @@ class Knowledge:
                 print "\nAnswered incorrectly:"
                 for idx in wrong_sort:
                     print str(idx)+" ("+str(wrongs[idx][1])+"s)"
-                print "\n"
             cor=raw_input("\nAny corrections? (y/n) ")
-            if cor.upper()[0]=="Y":
+            if cor!="" and cor.upper()[0]=="Y":
                 cor=int(raw_input("Which number? > "))
                 if cor in rights.keys():
                     cor_item=rights.pop(cor)
@@ -325,7 +336,7 @@ class Knowledge:
                         print "I don't know what to do then."
                 elif cor in wrongs.keys():
                     cor_item=wrongs.pop(cor)
-                    if raw_input("You said you didn't know number %i- change that to a right answer? (y/n) " % cor).upper()[0]=="Y":
+                    if raw_input("You said you didn't know number %i, change that to a right answer? (y/n) " % cor).upper()[0]=="Y":
                         print "Ok, marking it right."
                         rights[cor]=cor_item
                         right_time_tot+cor_item[1]
@@ -438,8 +449,8 @@ if __name__ == '__main__':
     config_data = {"load_dir": "./Data", "save_dir": "./Data", "data_dir": "./Data"}
     selection=""
     k=Knowledge()
-    k.setQuiz("JMMKBS")
-    #k.randomQuiz()
+    #k.setQuiz("DEBS")
+    k.randomQuiz(min_level=Knowledge.FIRST)
     #k.randomWorkout()
     '''while selection=="":
         setName = raw_input("Which set? ")
