@@ -6,6 +6,7 @@ import random
 import string
 import Technique, Form, Weapon, Exercise, Meditation
 import dataGuy
+import pprint
 
 class Knowledge:
     UNDER_BB=0
@@ -243,9 +244,123 @@ class Knowledge:
             if tech.level >= min_level:
                 eligible.append(tech)
         res=None
+        res_buffer=[]
         while not res:
-            res=self.setQuiz(random.choice(eligible).name)
+            res_buffer.append(self.setQuiz(random.choice(eligible).name))
+            if raw_input("Try a different technique? (y/n) > ")[0].upper()=="Y":
+                continue
+            else:
+                res=res_buffer
         return res
+    
+    # order options are all, granular, random, or an integer i (random i from each set)
+    # granularity options are coarse (steps of 5-10), fine (1-3), medium (1-6), or none (1)
+    def runQuiz(self,test_sets,order="random",granularity="none"):
+        step_min=1
+        step_max=1
+        if granularity=="fine":
+            step_max=3
+        elif granularity=="medium":
+            step_max=6
+        elif granularity=="coarse":
+            step_min=5
+            step_max=10
+        quiz_results={"avg":0,"right":0}
+        right=0
+        tot=0
+        time_tot=0
+        right_time_tot=0
+        wrongs={}
+        rights={}
+        check=raw_input("Hit Enter to start quiz > ")
+        if check!="":
+            if check=="q":
+                return quiz_results
+            else:
+                return None
+        print "(-=pass, q=quit, h=hint, enter=you know the answer)\n"
+        for target_set in test_sets:
+            tech_numbers=range(1,target_set.number+1)
+            condition_met=False
+            while not condition_met:
+                if order=="random":
+                    tech_num=random.choice(tech_numbers)
+                    tot+=1
+                    answer=timed_input("%s number %i\n"
+                                       "  (%i/%i %0.2fs avg)" % (target_set.get_desc(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
+                                       )
+                    if answer[0]=="h":
+                        tech=target_set.get_technique(tech_num)
+                        if tech:
+                            print tech.hint
+                        else:
+                            print "\n\nSorry, no hints available for this one.\n"
+                        answer=timed_input("%s number %i\n"
+                                       "  (%i/%i %0.2fs avg)" % (target_set.get_desc(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
+                                       )
+                    print ""
+                    quiz_results[tech_num]=answer
+                    tech_numbers.remove(tech_num)
+                    time_tot+=answer[1]
+                    if answer[0]=="":
+                        right+=1
+                        right_time_tot+=answer[1]
+                        rights[tech_num]=answer
+                    elif answer[0]=="-":
+                        wrongs[tech_num]=answer
+                    elif answer[0]=="q":
+                        wrongs[tech_num]=answer
+                        break
+                    if len(tech_numbers)==0:
+                        condition_met=True
+                elif order=="all":
+                    pass
+        corrections=True
+        while corrections:
+            print "\nResults:"
+            avg=(0 if right==0 else right_time_tot/right)
+            print "%i out of %i right, average time: %0.2fs" % (right, tot, avg)
+            quiz_results["right"]=right
+            quiz_results["avg"]=avg
+            print "quiz took %i sec total" % time_tot 
+            if len(rights)>0:
+                print "Right answers:"
+                long_sort=sorted(rights.iteritems(), key=lambda (k,v): v[1], reverse=True)
+                for lng in long_sort:
+                    print str(lng[0])+" ("+str(rights[lng[0]][1])+"s)"
+            wrong_sort=sorted(wrongs, key=lambda key: wrongs[key])
+            if len(wrongs)>0:
+                print "\nAnswered incorrectly:"
+                for idx in wrong_sort:
+                    print str(idx)+" ("+str(wrongs[idx][1])+"s)"
+            cor=raw_input("\nAny corrections? (y/n) ")
+            if cor!="" and cor.upper()[0]=="Y":
+                cor=int(raw_input("Which number? > "))
+                if cor in rights.keys():
+                    cor_item=rights.pop(cor)
+                    if raw_input("You said you knew number %i, was that answer wrong? (y/n) " % cor).upper()[0]=="Y":
+                        print "Ok, marking it as wrong."
+                        wrongs[cor]=cor_item
+                        right_time_tot-cor_item[1]
+                        right-=1
+                    else:
+                        print "I don't know what to do then."
+                elif cor in wrongs.keys():
+                    cor_item=wrongs.pop(cor)
+                    if raw_input("You said you didn't know number %i, change that to a right answer? (y/n) " % cor).upper()[0]=="Y":
+                        print "Ok, marking it right."
+                        rights[cor]=cor_item
+                        right_time_tot+cor_item[1]
+                        right+=1
+                    else:
+                        print "I don't know what to do then."
+                else:
+                    print "I don't recognize that technique."
+                    if target_set.number<cor:
+                        print target_set.name+" only has "+str(target_set.number)+" techniques."
+            else:
+                corrections=False
+        return quiz_results
         
     def setQuiz(self, set_name, retake=False):
         #TODO: check for which set by name, initials, etc...
@@ -361,7 +476,26 @@ class Knowledge:
                 else:
                     done=True
         return quiz_results
-            
+    
+    # granularity indicates how many techniques will be quizzed per set-
+    # input options are coarse (steps of 5-10), fine (1-3), medium (1-6), or none (1)
+    def spotCheck(self,granularity="medium",level=UNDER_BB):
+        sets=self.getLevelSets(level,randomize=False)
+        #for tech_set in sets:
+        pass
+        
+    def getLevelSets(self,level=UNDER_BB,randomize=False):
+        eligible=[]
+        for tech_set in self.techniques:
+            if tech_set.level>level:
+                eligible.append(tech_set)
+        if randomize:
+            return random.shuffle(eligible)
+        else:
+            return eligible
+        
+        
+    
     def findByInitials(self, initOrName, level=UNDER_BB):
         initOrName=initOrName.strip().upper()
         initials=initOrName
@@ -445,12 +579,16 @@ def testWords(actual, b):
 
    
 if __name__ == '__main__':
-    global config_data 
-    config_data = {"load_dir": "./Data", "save_dir": "./Data", "data_dir": "./Data"}
+    config_data = {"load_dir": "Data", "save_dir": "Data", "data_dir": "Data"}
+    data=dataGuy.dataGuy(config_data)
     selection=""
     k=Knowledge()
-    #k.setQuiz("DEBS")
-    k.randomQuiz(min_level=Knowledge.FIRST)
+    data.save_data(k.forms,"forms.txt")
+    data.load_all()
+    for item in data.loaded["Forms"]:
+        print item
+    #k.setQuiz("Jahp Ki")
+    #k.randomQuiz(min_level=Knowledge.FIRST)
     #k.randomWorkout()
     '''while selection=="":
         setName = raw_input("Which set? ")

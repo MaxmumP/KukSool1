@@ -1,14 +1,17 @@
-import json
+import pickle
 import os
+import sys
+import time
+import Form
 
-class data_guy:
-    def __init__(self, load_dir="", save_dir="", data_dir=""):
-        global config_data
-        if config_data.haskey("load_dir"):
+class dataGuy:
+    def __init__(self, config_data, load_dir="", save_dir="", data_dir=""):
+        self.config_data=config_data
+        if self.config_data.has_key("load_dir"):
             self.load_dir = config_data["load_dir"]
-        if config_data.haskey("save_dir"):
+        if self.config_data.has_key("save_dir"):
             self.save_dir = config_data["save_dir"]
-        if config_data.haskey("data_dir"):
+        if self.config_data.has_key("data_dir"):
             self.data_dir = config_data["data_dir"]
         # user may choose to override the config_data at some point
         if load_dir:
@@ -17,32 +20,66 @@ class data_guy:
             self.save_dir=save_dir
         if data_dir:
             self.data_dir=data_dir
-        
-    def load_all(self):
-        # TODO: This could be more general- generic load of whatever categories the user chooses
-        self.returndata={"Forms":[], "Techniques":[], "Weapons":[], "Exercises": [], "Meditations": []}
+            
+        self.loaded={}
     
-        form_file=os.path.join(config_data["load_dir"], "forms.txt")
-        form_data=self.load_form(self.read_loadingfile(form_file))
+    def save_data(self, data, filename="", path=""):
+        full_path=""
+        if not filename:
+            filename="temp_"+time.mktime(time.localtime())
+        if not path and self.data_dir:
+            path=self.data_dir
+        # if any path was set, join filename to it
+        if path:
+            full_path=os.path.join(path,filename)
+        else:
+            full_path=os.path.join(".",filename)
+        if os.path.isfile(full_path):
+            overwrite=raw_input("%s exists, overwrite? (y/n) " % full_path)
+            if overwrite.upper()=="Y":
+                write_file=open(full_path,"wb")
+                pickle.dump(data, write_file)
+                write_file.close()
+                print "Data saved in %s" % full_path
+                return True
+            else:
+                print "Quit without saving."
+                return False
+        elif not os.path.isdir(path):
+            os.mkdir(path)
+        write_file=open(full_path,"wb")
+        pickle.dump(data, write_file)
+        write_file.close()
+        return True
+            
+
+    def load_all(self, load_dir=""):
+        # TODO: This could be more general- generic load of whatever categories the user chooses
+        self.loaded={"Forms":[], "Techniques":[], "Weapons":[], "Exercises": [], "Meditations": []}
+        if load_dir:
+            form_file=os.path.join(load_dir, "forms.txt")
+        else:
+            form_file=os.path.join(self.load_dir, "forms.txt")
+        if os.path.isfile(form_file):
+            print "Loading forms"
+            self.loaded["Forms"]=self.read_loadingfile(form_file)
         
+        '''
         tech_file=file(os.path.join(config_data["load_dir"], "techniques.csv"), "r")
         weap_file=file(os.path.join(config_data["load_dir"], "weapons.csv"), "r")
         ex__file=file(os.path.join(config_data["load_dir"], "exercises.csv"), "r")
-        med__file=file(os.path.join(config_data["load_dir"], "meditations.csv"), "r")
-    
-    def load_form(self, columns):
-        form_data=[]
-        for column in columns:
-            print column
+        med__file=file(os.path.join(config_data["load_dir"], "meditations.csv"), "r")'''
+        return self.loaded
         
     def read_loadingfile(self, filepath):
-        f = file(filepath,"r")
-        title_line=""
-        for line in f.readlines():
-            if line.strip()[0]=="#":
-                continue
-            if title_line=="":
-                title_line=line.strip()
-                continue
-            
-        return title_line
+        f = file(filepath,"rb")
+        file_data=pickle.load(f)
+        return file_data
+    
+if __name__ == '__main__':
+    test_form=Form.Form("Jung Gum Hyung", 1, "Straight Sword Form", 1, 70)
+    data=dataGuy({})
+    print test_form
+    data.save_data(test_form, "forms.txt", "Data")
+    data.load_all("Data")
+    print data.loaded
