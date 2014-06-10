@@ -61,7 +61,7 @@ class Knowledge:
                            Technique.Set("Joong Geup Sohn Mohk Soo", 7, "", Knowledge.BL_S1),
                            Technique.Set("Ahp Eui Bohk Soo", 20, "", Knowledge.BL_S2),
                            Technique.Set("Dee Eui Bohk Soo", 23, "", Knowledge.DBN),
-                           Technique.Set("Kwan Jeul Liu Ki", 15, "", Knowledge.DBN),
+                           Technique.Set("Kwan Jeul Liu Ki", 13, "", Knowledge.DBN),
                            Technique.Set("Too Ki", 13, "", Knowledge.DBN),
                            Technique.Set("Mohk Joh Leu Ki", 5, "", Knowledge.DBN),
                            Technique.Set("Bohn Too Ki", 10, "", Knowledge.DBN),
@@ -131,7 +131,10 @@ class Knowledge:
                            "e": "y",
                            "g": "k",
                            "u": "oo"}
-                       
+    
+    def loadSavedTechniques(self,techniques):
+        self.techniques=techniques                   
+    
     def getTechnique(self, searchSet, num_res=-1, threshold=0):
         totalMatches=0
         matches={}
@@ -235,7 +238,6 @@ class Knowledge:
             else:
                 printstr+="\n"
         printstr+="\n"
-        print printstr
         recorder(printstr)
     
     def randomQuiz(self, min_level=0):
@@ -287,7 +289,7 @@ class Knowledge:
                     tech_num=random.choice(tech_numbers)
                     tot+=1
                     answer=timed_input("%s number %i\n"
-                                       "  (%i/%i %0.2fs avg)" % (target_set.get_desc(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
+                                       "  (%i/%i %0.2fs avg)" % (target_set.get_description(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
                                        )
                     if answer[0]=="h":
                         tech=target_set.get_technique(tech_num)
@@ -296,7 +298,7 @@ class Knowledge:
                         else:
                             print "\n\nSorry, no hints available for this one.\n"
                         answer=timed_input("%s number %i\n"
-                                       "  (%i/%i %0.2fs avg)" % (target_set.get_desc(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
+                                       "  (%i/%i %0.2fs avg)" % (target_set.get_description(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
                                        )
                     print ""
                     quiz_results[tech_num]=answer
@@ -362,7 +364,7 @@ class Knowledge:
                 corrections=False
         return quiz_results
         
-    def setQuiz(self, set_name, retake=False):
+    def setQuiz(self, set_name, retake=False, enter_data=False):
         #TODO: check for which set by name, initials, etc...
         # right now, just do initials
         res=self.findByInitials(set_name)
@@ -395,7 +397,9 @@ class Knowledge:
             tech_num=random.choice(tech_numbers)
             tot+=1
             answer=timed_input("%s number %i\n"
-                               "  (%i/%i %0.2fs avg)" % (target_set.get_desc(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
+                               "  (%i/%i %0.2fs avg)" % (target_set.get_description(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right),
+                               enter_data,
+                               default_desc=target_set.get_technique(tech_num).get_description()
                                )
             if answer[0]=="h":
                 tech=target_set.get_technique(tech_num)
@@ -404,21 +408,25 @@ class Knowledge:
                 else:
                     print "\n\nSorry, no hints available for this one.\n"
                 answer=timed_input("%s number %i\n"
-                               "  (%i/%i %0.2fs avg)" % (target_set.get_desc(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
+                               "  (%i/%i %0.2fs avg)" % (target_set.get_description(), tech_num, tot, target_set.number, 0 if right==0 else right_time_tot/right)
                                )
             print ""
             quiz_results[tech_num]=answer
+            if enter_data:
+                target_set.get_technique(tech_num).set_description(answer[2])
+                if answer[3]:
+                    target_set.get_technique(tech_num).set_hint(answer[3])
             tech_numbers.remove(tech_num)
             time_tot+=answer[1]
             if answer[0]=="":
                 right+=1
                 right_time_tot+=answer[1]
                 rights[tech_num]=answer
-            elif answer[0]=="-":
-                wrongs[tech_num]=answer
             elif answer[0]=="q":
                 wrongs[tech_num]=answer
                 break
+            else:
+                wrongs[tech_num]=answer
         corrections=True
         while corrections:
             print "\nResults:"
@@ -467,7 +475,8 @@ class Knowledge:
         if not retake:
             done=False
             while not done:
-                if raw_input("\nWould you like to quiz yourself on this technique again? (y/n) ").upper()=="Y":
+                resp=raw_input("\nWould you like to quiz yourself on this technique again? (y/n) ").upper()
+                if len(resp)>0 and resp[0]=="Y":
                     new_results=self.setQuiz(target_set.name, retake=True)
                     print "\nYou got %i right this time around and averaged %0.2fs per answer." % (new_results["right"],new_results["avg"])
                     if new_results["avg"]<quiz_results["avg"] and new_results["right"]>=quiz_results["right"]:
@@ -522,12 +531,22 @@ def recorder(rec_string,dest="", target=""):
         record_file=file(file_loc,"a")
         record_file.write(rec_string)
         
-def timed_input(prompt):
+def timed_input(prompt, data_entry=False, default_desc=""):
     start_tm=datetime.datetime.now()
     answer=raw_input(prompt+" > ")
+    description=""
+    add_hint=""
+    hint=""
+    if answer=="" and data_entry:
+        description = raw_input("Enter keyword(s) or description of this technique:\n > %s" % (default_desc)+chr(8)*len(default_desc))
+        if not description:
+            description=default_desc
+        add_hint = raw_input("Would you like to add a hint word? (y/n) > ")
+        if len(add_hint)>0 and add_hint[0].upper()=="Y":
+            hint = raw_input("Hint word/phrase: > ")
     delta=datetime.datetime.now()-start_tm
     res_time=delta.seconds+delta.microseconds/1000000.
-    return (answer, res_time)
+    return [answer, res_time, description, hint]
     
 def testWords(actual, b):
     a=actual
@@ -583,14 +602,35 @@ if __name__ == '__main__':
     data=dataGuy.dataGuy(config_data)
     selection=""
     k=Knowledge()
+    #k.setQuiz("Jahp ki")
+    #data.load_subset("Techniques", "techniques.txt")
+    '''if data.loaded.has_key("Techniques"):
+        for item in data.loaded["Techniques"]:
+            print item.get_full_description()
+        #k.loadSavedTechniques(data.loaded["Techniques"])
+    else:
+        print "No data loaded"
     data.save_data(k.forms,"forms.txt")
     data.load_all()
     for item in data.loaded["Forms"]:
         print item
-    #k.setQuiz("Jahp Ki")
-    #k.randomQuiz(min_level=Knowledge.FIRST)
+    '''
+    # FIXME: Add a quizzer mode where the quiz asks you for the description of the technique/keywords when quizzing
+    '''for technique_set in k.techniques:
+        print technique_set.get_full_description()
+    print ""
+    print k.findByInitials("SPK")[0].get_full_description()
+    print k.setQuiz("SPK")
+    
+    for technique_set in k.techniques:
+        print technique_set.get_full_description()
+    data.save_data(k.techniques,"techniques.txt")
+    
+    #k.randomQuiz(min_level=Knowledge.DBN
+    #             )
     #k.randomWorkout()
-    '''while selection=="":
+    '''
+    while selection=="":
         setName = raw_input("Which set? ")
         # setName="Bohn To Ki"
         # sys.stdout.flush()
@@ -610,4 +650,4 @@ if __name__ == '__main__':
                 match = matches[selection-1]
         else:
             selection = match
-    print match'''
+    print match

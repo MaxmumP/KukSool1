@@ -51,26 +51,34 @@ class dataGuy:
         pickle.dump(data, write_file)
         write_file.close()
         return True
-            
 
     def load_all(self, load_dir=""):
         # TODO: This could be more general- generic load of whatever categories the user chooses
-        self.loaded={"Forms":[], "Techniques":[], "Weapons":[], "Exercises": [], "Meditations": []}
+        #self.loaded={"Forms":[], "Techniques":[], "Weapons":[], "Exercises": [], "Meditations": []}
         if load_dir:
-            form_file=os.path.join(load_dir, "forms.txt")
-        else:
-            form_file=os.path.join(self.load_dir, "forms.txt")
+            self.load_dir=load_dir
+        form_file=os.path.join(self.load_dir, "forms.txt")
         if os.path.isfile(form_file):
             print "Loading forms"
             self.loaded["Forms"]=self.read_loadingfile(form_file)
+        # FIXME: Need to add other object loading
+        tech_file=os.path.join(self.load_dir, "techniques.txt")
+        if os.path.isfile(form_file):
+            print "Loading techniques"
+            self.loaded["Techniques"]=self.read_loadingfile(tech_file)
         
-        '''
-        tech_file=file(os.path.join(config_data["load_dir"], "techniques.csv"), "r")
-        weap_file=file(os.path.join(config_data["load_dir"], "weapons.csv"), "r")
+        '''weap_file=file(os.path.join(config_data["load_dir"], "weapons.csv"), "r")
         ex__file=file(os.path.join(config_data["load_dir"], "exercises.csv"), "r")
         med__file=file(os.path.join(config_data["load_dir"], "meditations.csv"), "r")'''
         return self.loaded
-        
+    
+    def load_subset(self, file_contents, file_name, load_dir=""):
+        if load_dir:
+            self.load_dir=load_dir
+        load_file=os.path.join(self.load_dir, file_name)
+        if os.path.isfile(load_file):
+            self.loaded[file_contents]=self.read_loadingfile(load_file)
+     
     def read_loadingfile(self, filepath):
         f = file(filepath,"rb")
         file_data=pickle.load(f)
