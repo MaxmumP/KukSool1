@@ -1,0 +1,29 @@
+{
+  "mainFile": "C:/Users/Owner/git/MaxmumPimp/KukSool1/KukSool1/quizzer.py", 
+  "use-tabs": false, 
+  "venv": "", 
+  "relatedProjects": [], 
+  "name": "KukSool1", 
+  "license": "", 
+  "url": "", 
+  "pythonPath": "C:\\Python27\\python.exe", 
+  "preExecScript": "", 
+  "additional_builtins": [], 
+  "programParams": "", 
+  "indentation": 4, 
+  "PYTHONPATH": "", 
+  "supported-extensions": [
+    ".py", 
+    ".html", 
+    ".jpg", 
+    ".png", 
+    ".ui", 
+    ".css", 
+    ".json", 
+    ".js", 
+    ".ini"
+  ], 
+  "project-type": "", 
+  "postExecScript": "", 
+  "description": ""
+}

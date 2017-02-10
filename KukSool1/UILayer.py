@@ -25,43 +25,49 @@ class Knowledge:
     FIRST=1
     SECOND=2
     THIRD=3
-    
+
     def __init__(self):
-        self.weapons = [Weapon.Weapon("Gum", [Form.Form("Jung Gum Hyung", 1, "Straight Sword Form", 70)],meaning="Sword", exercises=[Exercise.Exercise("Kneeling", 5), Exercise.Exercise("Drawing and Sheathing", 3), Exercise.Exercise("Moving", 4), Exercise.Exercise("Cutting", 5)]),
-                        Weapon.Weapon("Bong", [Form.Form("Joong Bong Il Hyung", 1, "First Staff Form", 35)], meaning="Staff", meditations=[Meditation.Meditation("Standing", 15)], exercises=[Exercise.Exercise("Moving", 3)]),
-                        Weapon.Weapon("Dahn Bong", [Form.Form("Dahn Bong Hyung", 4, "Short Staff Form", 25)], meaning="Short Staff", meditations=[Meditation.Meditation("Kneeling", 4)]),
-                        Weapon.Weapon("Juhl Bong", [Form.Form("Juhl Bong Hyung", 1, "Nunchucks Form", 50)], meaning="Nunchucks", exercises=[Exercise.Exercise("Spinning", 4, "Set 1"),
-                                                                                                           Exercise.Exercise("Rebounding", 4, "Set 2"),
-                                                                                                           Exercise.Exercise("Around the Body", 4, "Set 3"),
-                                                                                                           Exercise.Exercise("Plum Flower", 1, "Set 4"),
-                                                                                                           Exercise.Exercise("Passing/Transfer", 4, "Set 5"),
-                                                                                                           Exercise.Exercise("Advanced", 4, "Set 6"),
-                                                                                                           Exercise.Exercise("Really Advanced", 4, "Set 7"),
-                                                                                                           Exercise.Exercise("Flying", 5, "Set 8"),
-                                                                                                           Exercise.Exercise("Opposite", 8, "Set 9") ]
-                                      )
+        self.weapons = [Weapon.Weapon("Gum", [Form.Form("Jung Gum Hyung", 1, "Straight Sword Form", Knowledge.DBN, 70)],meaning="Sword", exercises=[Exercise.Exercise("Kneeling", 5), Exercise.Exercise("Drawing and Sheathing", 3), Exercise.Exercise("Moving", 4), Exercise.Exercise("Cutting", 5)]),
+                        Weapon.Weapon("Bong", [Form.Form("Joong Bong Il Hyung", 1, "First Staff Form", Knowledge.DBN, 35)], meaning="Staff", meditations=[Meditation.Meditation("Standing", 15)], exercises=[Exercise.Exercise("Moving", 3)]),
+                        Weapon.Weapon("Dahn Bong", [Form.Form("Dahn Bong Hyung", 4, "Short Staff Form", Knowledge.DBN, 45)], meaning="Short Staff", meditations=[Meditation.Meditation("Kneeling", 4)]),
+                    Weapon.Weapon("Juhl Bong", [Form.Form("Juhl Bong Hyung", 1, "Nunchaku Form", Knowledge.SECOND, 35)], meaning="Chain Flail", exercises=
+                              [Exercise.Exercise("Spinning", 4, "Set 1"),
+                               Exercise.Exercise("Rebounding", 4, "Set 2"),
+                               Exercise.Exercise("Around the Body", 4, "Set 3"),
+                               Exercise.Exercise("Plum Flower", 1, "Set 4"),
+                               Exercise.Exercise("Passing/Transfer", 4, "Set 5"),
+                               Exercise.Exercise("Flying", 4, "Set 6"),
+                               Exercise.Exercise("Advanced", 4, "Set 7"),
+                               Exercise.Exercise("REAL Set", 5, "Set 8"),
+                               Exercise.Exercise("Inverted", 8, "Set 9") ]
+                                    )
                         ]
-        
-        self.forms = [Form.Form("Ki Cho Hyung", 6, "", Knowledge.YELLOW, 50),
-                      Form.Form("Cho Geup Hyung", 1, "", Knowledge.BLUE, 40),
-                      Form.Form("Jeung Geup Hyung", 1, "", Knowledge.RED, 45),
-                      Form.Form("Goh Geup Hyung", 1, "", Knowledge.BROWN, 40),
+
+        self.forms = [Form.Form("Ki Cho Hyung", 6, "Fundamental Form", Knowledge.YELLOW, 50),
+                      Form.Form("Cho Geup Hyung", 1, "Elementary Level Form", Knowledge.BLUE, 40),
+                      Form.Form("Jeung Geup Hyung", 1, "Intermediate Level Form", Knowledge.RED, 45),
+                      Form.Form("Goh Geup Hyung", 1, "Advanced/Intermediate Level Form", Knowledge.BROWN, 40),
                       Form.Form("Dae Geup Hyung", 1, "", Knowledge.DBN, 30),
                       Form.Form("Gum Mo Hyung", 1, "", Knowledge.FIRST, 75),
-                      Form.Form("Baek Pahl Ki Hyung", 1, "", Knowledge.SECOND, 85) ]
-        
-        self.techniques = [Technique.Set("Sohn Ppae Ki", 5, "", Knowledge.YELLOW_S),
-                           Technique.Set("Ki Bohn Soo", 15, "", Knowledge.YELLOW),
-                           Technique.Set("Sohn Mohk Soo", 11, "", Knowledge.BLUE_S),
-                           Technique.Set("Eui Bohk Soo", 13, "", Knowledge.BLUE),
-                           Technique.Set("Ahn Sohn Mohk Soo", 6, "", Knowledge.RED_S),
-                           Technique.Set("Maek Chi Ki", 15, "", Knowledge.RED),
-                           Technique.Set("Maek Cha Ki", 15, "", Knowledge.BROWN_S),
-                           Technique.Set("Joong Maek Maga Ki Bohn Soo", 15, "", Knowledge.BROWN),
+                      Form.Form("Baek Pahl Ki Hyung", 1, "", Knowledge.SECOND, 85),
+                      Form.Form("Kyuk Pah Hyung", 1, "", Knowledge.SECOND, 85) 
+                      ]
+
+        # Technique.Set(name, number, meaning, level=-1, starts_with="", techniques=[])
+        # TODO: Populate these with Technique.technique(number, description, similarTo, hints=[], hyuls=[])
+
+        self.techniques = [Technique.Set("Sohn Ppae Ki", 5, "Defense against Wrist Grabs", Knowledge.YELLOW_S),
+                           Technique.Set("Ki Bohn Soo", 15, "Fundamental Techniques", Knowledge.YELLOW),
+                           Technique.Set("Sohn Mohk Soo", 11, "Fundamental Wrist Techniques", Knowledge.BLUE_S),
+                           Technique.Set("Eui Bohk Soo", 13, "Clothing Techniques", Knowledge.BLUE),
+                           Technique.Set("Ahn Sohn Mohk Soo", 6, "Inside Wrist Techniques", Knowledge.RED_S),
+                           Technique.Set("Maek Chi Ki", 15, "Hand Striking Techniques to Pressure Points", Knowledge.RED),
+                           Technique.Set("Maek Cha Ki", 15, "Foot Strike Techniques to Pressure Points", Knowledge.BROWN_S),
+                           Technique.Set("Joo Muhk Maga Ki Bohn Soo", 15, "Fundamental Techniques with Blocking", Knowledge.BROWN),
                            Technique.Set("Joong Geup Sohn Mohk Soo", 7, "", Knowledge.BL_S1),
                            Technique.Set("Ahp Eui Bohk Soo", 20, "", Knowledge.BL_S2),
-                           Technique.Set("Dee Eui Bohk Soo", 23, "", Knowledge.DBN),
-                           Technique.Set("Kwan Jeul Liu Ki", 13, "", Knowledge.DBN),
+                           Technique.Set("Dee Eui Bohk Soo", 23, "Clothing Techniques against a grab from behind", Knowledge.DBN),
+                           Technique.Set("Kwan Juhl Ki", 13, "", Knowledge.DBN),
                            Technique.Set("Too Ki", 13, "", Knowledge.DBN),
                            Technique.Set("Mohk Joh Leu Ki", 5, "", Knowledge.DBN),
                            Technique.Set("Bohn Too Ki", 10, "", Knowledge.DBN),
@@ -78,10 +84,16 @@ class Knowledge:
                            Technique.Set("Ee In Jeh Ahp Sool", 10, "", Knowledge.FIRST),
                            Technique.Set("Jahp Ki", 20, "", Knowledge.FIRST),
                            Technique.Set("Keun Dae Ryuhn", 8, "Close-Range Sparring Techniques", Knowledge.FIRST),
-                           Technique.Set("Johk Bahng Uh Sool", 15, "Defense Against Kicking Techniques", Knowledge.FIRST)
+                           Technique.Set("Johk Bahng Uh Sool", 15, "Defense Against Kicking Techniques", Knowledge.FIRST),
+                           Technique.Set("Jee Ahp Sool", 10, "Finger Pressure Techniques", Knowledge.SECOND),
+                           Technique.Set("Yuhn Heng Sool (moving)", 10, "Finger Pressure Techniques", Knowledge.SECOND),
+                           Technique.Set("Poh Bahk Sool", 10, "Roping Techniques", Knowledge.SECOND),
+                           Technique.Set("Jee Pahng Ee Sool", 10, "Cane Techniques", Knowledge.SECOND)
                            ]
-        
-        '''self.techniques = {"Techniques":
+
+        '''
+        # Old Implementation
+        self.techniques = {"Techniques":
                                     ["Sohn Ppae Ki",
                                     "Ki Bohn Soo",
                                     "Sohn Mohk Soo",
@@ -101,7 +113,7 @@ class Knowledge:
                                     "Ssang Soo",
                                     "Dahn Do Maek Ki"]
                                  }
-        
+
         self.first_degree = {"Techniques":
                                 ["Ki Bohn Bohn",
                                  "Gahk Doh Bup",
@@ -115,7 +127,7 @@ class Knowledge:
                                  "Keun Dae Ryuhn",
                                  "Johk Bahng Uh Sool"]
                              }'''
-                       
+
         self.altSpellings={"Mohk":["Mek","Mok","Mock"],
                          "Joh": ["Jeul","Jol","Jo","Jul"],
                          "Leu": ["Liu","Li","Lew"],
@@ -125,27 +137,36 @@ class Knowledge:
                          "Eue": ["Ew", "Oo", "U"],
                          "Bohk": ["Bok", "Bahk", "Back", "Bach"],
                          "Soo": ["So", "Su", "Sue", "Sew"]}
-                         
+
         # for spelling errors like e/y (pae->pay), g/k (gi->ki), o/oh (mok->mohk), u/oo (soo->su)
         self.letterChange={"o": "oh",
+                           "o": "u",
                            "e": "y",
                            "g": "k",
-                           "u": "oo"}
-    
+                           "b": "p",
+                           "u": "oo",
+                           "u": "uh",
+                           "a": "ah",
+                           "an": "ang",
+                           "ss": "s"}
+
     def loadSavedTechniques(self,techniques):
-        self.techniques=techniques                   
-    
-    def getTechnique(self, searchSet, num_res=-1, threshold=0):
-        totalMatches=0
+        self.techniques=techniques
+
+    def getTechnique(self, searchSetName, num_res=-1, charMatchThreshold=0):
+        
         matches={}
+        
+        # loop through all techniques
         for t_set in self.techniques:
             setName=t_set.name
-            matches[setName]={"Technique":t_set, "Total Words": 0, "Matched Words": 0, 
+            # construct an object for this set, tracking its similarity to the input
+            matches[setName]={"Technique":t_set, "Total Words": 0, "Matched Words": 0,
                                       "Matches":[], "charMatches":0}
             # TODO: add a tracker like usedWords=[] that will allow me to go back through and match that word better- maybe with self.altSpellings
             # TODO: first, fast check for first letter matches (K.B.S. matching KBS/EBS, etc)
             # TODO: Keep track of percent matched as primary assessment, not absolute matches
-            setWords=string.capwords(searchSet).split()
+            setWords=string.capwords(searchSetName).split()
             for actualWord in setName.split():
                 matches[setName]["Total Words"]+=1
                 bestMatch="_"*len(actualWord)
@@ -154,6 +175,7 @@ class Knowledge:
                 for word in setWords:
                     curCharMatch=0
                     partial_match=False
+                    # Exact Match
                     if word==actualWord:
                         matches[setName]["Matched Words"]+=1
                         matches[setName]["charMatches"]+=len(word)
@@ -179,44 +201,42 @@ class Knowledge:
                             setWords.remove(word)
                 matches[setName]["charMatches"]+=bestCharMatch
                 matches[setName]["Matches"].append(bestMatch)
+        
+        # sort the results by total number of matching characters
         first_sort=sorted(matches.iteritems(), key=lambda (k,v): v["charMatches"], reverse=True)
         data_idx=1
-        
+
         valid_matches=[]
         if num_res!=-1:
             return first_sort[:num_res]
-        elif threshold>0:
+        elif charMatchThreshold>0:
             for candidate in first_sort:
-                if candidate[data_idx]["charMatches"]/(len(searchSet)-(searchSet.count(" ") if searchSet.count(" ")!=-1 else 0))>=threshold:
+                if candidate[data_idx]["charMatches"]/(len(searchSetName)-(searchSetName.count(" ") if searchSetName.count(" ")!=-1 else 0))>=charMatchThreshold:
                     valid_matches.append[candidate]
             return valid_matches
-        
+
         # if all words match in the best character match, return that match
         if (first_sort[0][data_idx]["Matched Words"]==first_sort[0][data_idx]["Total Words"]):
             return [first_sort[0]]
         # otherwise, return the first three matches
         else:
             return first_sort[:3]
-        
-        #second_sort=sorted(first_sort, key=lambda key: v["charMatches"], reverse=True)
-        #pprint(
-        #printf("%s has %i  set["Name"], " has "
-        
+
     def randomWorkout(self):
         results={"Titles":["Under DBN", "DBN", "First Degree", "Hyung", "Weapon"], "Picks":[]}
-        #TODO: Keep a record of previous picks, don't duplicate last 5 choices (and ensure pick within certain number of picks
-        
-        # separate under-dbn, dbn, first degree techniques
-        third=[]
-        second=[]
+        #TODO: Keep a record of previous picks, don't duplicate last 5 choices (and ensure items in "picks" show up within certain number of picks
+
+        # separate under-dbn (first tier), dbn (2nd tier), first degree (third tier) techniques
         first=[]
+        second=[]
+        third=[]
         for technique in self.techniques:
             if technique.level<Knowledge.DBN:
                 first.append(technique)
             elif technique.level <Knowledge.FIRST:
                 second.append(technique)
             elif technique.level<Knowledge.SECOND:
-                third.append(technique) 
+                third.append(technique)
         # First 11 techniques
         results["Picks"]=[random.choice(first)]
         # Rest of Under Black Belt
@@ -239,7 +259,7 @@ class Knowledge:
                 printstr+="\n"
         printstr+="\n"
         recorder(printstr)
-    
+
     def randomQuiz(self, min_level=0):
         eligible = []
         for tech in self.techniques:
@@ -254,8 +274,8 @@ class Knowledge:
             else:
                 res=res_buffer
         return res
-    
-    # order options are all, granular, random, or an integer i (random i from each set)
+
+    # order options are `all`, `granular`, `random`, or an integer i (random i from each set)
     # granularity options are coarse (steps of 5-10), fine (1-3), medium (1-6), or none (1)
     def runQuiz(self,test_sets,order="random",granularity="none"):
         step_min=1
@@ -293,7 +313,7 @@ class Knowledge:
                                        )
                     if answer[0]=="h":
                         tech=target_set.get_technique(tech_num)
-                        if tech:
+                        if tech and tech.hint:
                             print tech.hint
                         else:
                             print "\n\nSorry, no hints available for this one.\n"
@@ -324,7 +344,7 @@ class Knowledge:
             print "%i out of %i right, average time: %0.2fs" % (right, tot, avg)
             quiz_results["right"]=right
             quiz_results["avg"]=avg
-            print "quiz took %i sec total" % time_tot 
+            print "quiz took %i sec total" % time_tot
             if len(rights)>0:
                 print "Right answers:"
                 long_sort=sorted(rights.iteritems(), key=lambda (k,v): v[1], reverse=True)
@@ -363,7 +383,7 @@ class Knowledge:
             else:
                 corrections=False
         return quiz_results
-        
+
     def setQuiz(self, set_name, retake=False, enter_data=False):
         #TODO: check for which set by name, initials, etc...
         # right now, just do initials
@@ -403,7 +423,7 @@ class Knowledge:
                                )
             if answer[0]=="h":
                 tech=target_set.get_technique(tech_num)
-                if tech:
+                if tech and tech.hint:
                     print tech.hint
                 else:
                     print "\n\nSorry, no hints available for this one.\n"
@@ -434,7 +454,7 @@ class Knowledge:
             print "%i out of %i right, average time: %0.2fs" % (right, tot, avg)
             quiz_results["right"]=right
             quiz_results["avg"]=avg
-            print "quiz took %i sec total" % time_tot 
+            print "quiz took %i sec total" % time_tot
             if len(rights)>0:
                 print "Right answers:"
                 long_sort=sorted(rights.iteritems(), key=lambda (k,v): v[1], reverse=True)
@@ -485,14 +505,14 @@ class Knowledge:
                 else:
                     done=True
         return quiz_results
-    
+
     # granularity indicates how many techniques will be quizzed per set-
     # input options are coarse (steps of 5-10), fine (1-3), medium (1-6), or none (1)
     def spotCheck(self,granularity="medium",level=UNDER_BB):
         sets=self.getLevelSets(level,randomize=False)
         #for tech_set in sets:
         pass
-        
+
     def getLevelSets(self,level=UNDER_BB,randomize=False):
         eligible=[]
         for tech_set in self.techniques:
@@ -502,9 +522,9 @@ class Knowledge:
             return random.shuffle(eligible)
         else:
             return eligible
-        
-        
-    
+
+
+
     def findByInitials(self, initOrName, level=UNDER_BB):
         initOrName=initOrName.strip().upper()
         initials=initOrName
@@ -520,7 +540,7 @@ class Knowledge:
             if inits==initials:
                 results.append(technique)
         return results
-    
+
 def recorder(rec_string,dest="", target=""):
     if dest != "file":
         print rec_string
@@ -530,7 +550,7 @@ def recorder(rec_string,dest="", target=""):
             file_loc=target
         record_file=file(file_loc,"a")
         record_file.write(rec_string)
-        
+
 def timed_input(prompt, data_entry=False, default_desc=""):
     start_tm=datetime.datetime.now()
     answer=raw_input(prompt+" > ")
@@ -547,7 +567,7 @@ def timed_input(prompt, data_entry=False, default_desc=""):
     delta=datetime.datetime.now()-start_tm
     res_time=delta.seconds+delta.microseconds/1000000.
     return [answer, res_time, description, hint]
-    
+
 def testWords(actual, b):
     a=actual
     if len(a)>len(b):
@@ -558,8 +578,11 @@ def testWords(actual, b):
         shorterWord=a
     i=0
     frontMatch=""
+    shortLen = len(shorterWord)
+    longLen = len(longerWord)
     for letter in longerWord:
-        if (i+1 > len(shorterWord) or letter.upper()!=shorterWord[i].upper()):
+        # if letter didn't match or we've run out of letters, append a "_"
+        if (i+1 > shortLen or letter.upper()!=shorterWord[i].upper()):
             frontMatch+="_"
         else:
             frontMatch+=letter
@@ -569,20 +592,22 @@ def testWords(actual, b):
     backMatch=""
     # reverse longerWord then loop through it
     for letter in longerWord[::-1]:
-        if (i+1 > len(shorterWord) or letter.upper()!=shorterWord[i-1].upper()):
+        # if we're at the beginning of the longer word, or the letters don't match
+        if (i <= (longLen-shortLen) or letter.upper()!=shorterWord[shortLen-(longLen-i)-1].upper()):
             # if this character matched going forward, use it
             if (frontMatch[i-1]!="_"):
                 backMatch=frontMatch[i-1]+backMatch
             else:
                 backMatch="_"+backMatch
         else:
+            # we matched so prepend to backMatch
             backMatch=letter+backMatch
         i-=1
     curMatch=frontMatch
     if backMatch.count("_") < frontMatch.count("_"):
         curMatch=backMatch
     loops=0
-    
+
     while len(curMatch)>len(actual):
         # if match is too long, try stripping blanks from end first
         if (curMatch[-1])=="_":
@@ -594,10 +619,39 @@ def testWords(actual, b):
         if loops>=len(longerWord) or (curMatch[0]!="_" and curMatch[-1]!="_"):
             break
     return curMatch
-    
 
-   
+def getInputFromPrompt(prompt):
+    while not selection:
+        setName = raw_input(prompt)
+        return setName
+        
+def getByWord():
+    # setName="Bohn To Ki"
+    # sys.stdout.flush()
+    setName = getInputFromPrompt("Which set?: ")
+    k=Knowledge()
+    matches = k.getTechnique(setName)
+    match=matches[0]
+    if len(matches)!=1:
+        print "No exact match for %s, select from list:" % setName
+        i=1
+        for match in matches:
+            print str(i)+". "+match[0]
+            i+=1
+        print str(i)+". Try again with different spelling"
+        sys.stdout.flush()
+        re_input = int(raw_input("> "))
+        if re_input!=i:
+            match = matches[re_input-1]
+            selection = match
+    else:
+        selection = match
+    print selection
+
+
 if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
     config_data = {"load_dir": "Data", "save_dir": "Data", "data_dir": "Data"}
     data=dataGuy.dataGuy(config_data)
     selection=""
@@ -621,33 +675,18 @@ if __name__ == '__main__':
     print ""
     print k.findByInitials("SPK")[0].get_full_description()
     print k.setQuiz("SPK")
-    
+
     for technique_set in k.techniques:
         print technique_set.get_full_description()
     data.save_data(k.techniques,"techniques.txt")
-    
-    #k.randomQuiz(min_level=Knowledge.DBN
-    #             )
-    #k.randomWorkout()
     '''
-    while selection=="":
-        setName = raw_input("Which set? ")
-        # setName="Bohn To Ki"
-        # sys.stdout.flush()
-        k=Knowledge()
-        matches = k.getTechnique(setName)
-        match=matches[0]
-        if len(matches)!=1:
-            print "No exact match for %s, select from list:" % setName 
-            i=1
-            for match in matches:
-                print str(i)+". "+match[0]
-                i+=1
-            print str(i)+". Try again with different spelling"
-            sys.stdout.flush()
-            selection = int(raw_input("> "))
-            if selection!=i:
-                match = matches[selection-1]
-        else:
-            selection = match
-    print match
+    
+    k.randomQuiz(min_level=Knowledge.DBN)
+    #             
+    #k.randomWorkout()
+    
+    
+    # Common Substitutions
+    # 
+    getByWord()
+    #print testWords("Ssang", "Song")

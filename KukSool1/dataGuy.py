@@ -1,6 +1,5 @@
 import pickle
 import os
-import sys
 import time
 import Form
 

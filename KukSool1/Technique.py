@@ -1,5 +1,6 @@
 import random
 
+# The Set (like Ki Bohn Soo) object holds a set of individual techniques (#2, #10, etc.)
 class Set:
     def __init__(self, name, number, meaning, level=-1, starts_with="", techniques=[]):
         self.name = name
@@ -53,8 +54,9 @@ class Set:
     def __str__(self):
         return self.name+("" if self.meaning=="" else " ("+self.meaning+")")+": "+str(self.number)+" techniques"
 
+# A Technique includes the number, description, links to similar techniques, hints, and pressure points (hyuls) 
 class Technique:
-    def __init__(self, number, description, similarTo, hints=[], hyuls=[], ):
+    def __init__(self, number, description, similarTo, hints=[], hyuls=[]):
         self.number = number
         self.description = description
         self.similarTo = similarTo
@@ -68,6 +70,7 @@ class Technique:
         return self.description
     
     def get_hint(self):
+        #TODO: Fix hints, add logic here
         #helpers=[self.hint,self.similarTo]
         #if len(self.hyul)>0:
         #    helpers.append(random.choice(self.hyul))
